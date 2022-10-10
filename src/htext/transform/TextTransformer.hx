@@ -19,7 +19,7 @@ class TextTransformer extends TransformerBase {
         (
             (textStyleContext.getPivot(c, this) +
             input * textStyleContext.getFontScale(this))
-            / aspects.getFactor(c) // aspect ratio correction
+            / aspects[c] // aspect ratio correction
             - 1); // gl offset
         return r;
     }

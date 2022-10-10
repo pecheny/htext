@@ -1,6 +1,6 @@
 package;
-#if !alayout
 import haxe.ds.ReadOnlyArray;
+#if !alayout
 @:enum abstract Axis2D(Int) to Int {
     public static var keys = [horizontal, vertical,];
     var horizontal = 0;
@@ -54,14 +54,16 @@ abstract AxisCollection<T>(Map<Axis2D, T>) from Map<Axis2D, T> {
     return this.exists(a);
 }
 
-typedef Location2D = {
-        pos:ReadOnlyArray<Float>,
-        size:ReadOnlyArray<Float>,
-        aspects:ReadOnlyArray<Float>,
-}
+
 #else
 typedef Axis2D = al.al2d.Axis2D;
-typedef Transformer = transform.Transformer;
+typedef Transformer = transform.TransformerBase;
+typedef AxisCollection2D<T> = al.al2d.Widget2D.AxisCollection2D<T>;
 #end
 
-typedef ROAxisCollection2D<T> = ReadOnlyArray<T>;
+typedef ROAxisCollection2D<T> = haxe.ds.ReadOnlyArray<T>;
+typedef Location2D = {
+    var pos(default, null):ReadOnlyArray<Float>;
+    var size(default, null):ReadOnlyArray<Float>;
+    var aspects(default, null):ReadOnlyArray<Float>;
+}

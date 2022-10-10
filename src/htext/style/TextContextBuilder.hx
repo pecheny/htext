@@ -3,7 +3,6 @@ import al.al2d.Axis2D;
 import al.al2d.Widget2D.AxisCollection2D;
 import font.bmf.BMFont.BMFontFactory;
 import font.FontStorage;
-import FuiBuilder.StageAspectKeeper;
 import htext.Align;
 import htext.h2d.H2dTextLayouter.H2dRichCharsLayouterFactory;
 import htext.style.Padding;
@@ -73,7 +72,7 @@ class TextContextBuilder implements TextContextStorage {
     }
 
     public function withSizeInPixels(px:Int) {
-        fontScale = new PixelFontHeightCalculator(ar.getFactorsRef(), ar, px);
+        fontScale = new PixelFontHeightCalculator(ar.getFactorsRef(), cast ar.getWindowSize(), px);
         return this;
     }
 

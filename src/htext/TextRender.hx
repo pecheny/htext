@@ -1,4 +1,6 @@
 package htext;
+import Axis.Location2D;
+import Axis.ROAxisCollection2D;
 import htext.style.TextStyleContext;
 import FuiBuilder;
 import haxe.io.Bytes;
@@ -112,20 +114,20 @@ class SmothnessWriter implements AttributeFiller {
     var writer:IValueWriter;
     var layouter:TextLayouter;
     var ctx:TextStyleContext;
-    var tr:TransformerBase;
-    var ws:Size2D;
+    var tr:Location2D;
+    var windowSize:ROAxisCollection2D<Int>;
 
     public function new(wr, l, ctx, tr, ws) {
         this.writer = wr;
         this.layouter = l;
         this.ctx = ctx;
         this.tr = tr;
-        this.ws = ws;
+        this.windowSize = ws;
     }
 
     public function write(target:Bytes, start) {
         var tiles = layouter.getTiles();
-        var base = ctx.getFontScale(tr) * ws.getValue(vertical) / 2;// DummyEditorField.value;
+        var base = ctx.getFontScale(tr) * windowSize[vertical] / 2;// DummyEditorField.value;
         var dfSize = ctx.getFont().getDFSize();
         for (i in 0...tiles.length) {
             var tile = tiles[i];
