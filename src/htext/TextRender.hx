@@ -1,12 +1,5 @@
 package htext;
-import Axis.Location2D;
-import Axis.ROAxisCollection2D;
-import htext.style.TextStyleContext;
-import FuiBuilder;
-import haxe.io.Bytes;
-import utils.DummyEditorField;
-import al.al2d.Axis2D;
-import al.al2d.Widget2D.AxisCollection2D;
+import Axis2D;
 import data.aliases.AttribAliases;
 import data.IndexCollection;
 import font.GLGlyphData.TileRecord;
@@ -14,19 +7,22 @@ import font.GLGlyphData;
 import gl.AttribSet;
 import gl.Renderable;
 import gl.RenderTargets;
-import gl.sets.MSDFSet;
 import gl.ValueWriter.AttributeWriters;
 import gl.ValueWriter;
+import haxe.io.Bytes;
+import htext.style.TextStyleContext;
+import htext.TextLayouter;
+import Location2D;
+import macros.AVConstructor;
 import transform.TransformerBase;
 import utils.DynamicBytes;
-import htext.TextLayouter;
 
 
 class TextRender<T:AttribSet> implements Renderable<T> {
     static var indices:IndexCollection;
     var value = "";
     var efficientLen = 0;
-    var charPos:AxisCollection2D<Float> = new AxisCollection2D();
+    var charPos:AxisCollection2D<Float> = AVConstructor.create(0.,0.);
     var transformer:TransformerBase;
     var stageHeight = 1;
     var charsLayouter:TextLayouter;
@@ -44,9 +40,7 @@ class TextRender<T:AttribSet> implements Renderable<T> {
         this.transformer = tr;
         transformer.changed.listen(setDirty);
         charsLayouter = layouter;
-        for (a in Axis2D.keys) {
-            charPos[a] = 0;
-        }
+
         posWriter = attrs.getWriter(AttribAliases.NAME_POSITION);
         uvWriter = attrs.getWriter(AttribAliases.NAME_UV_0);
     }
@@ -115,7 +109,7 @@ class SmothnessWriter implements AttributeFiller {
     var layouter:TextLayouter;
     var ctx:TextStyleContext;
     var tr:Location2D;
-    var windowSize:ROAxisCollection2D<Int>;
+    var windowSize:ReadOnlyAVector2D<Int>;
 
     public function new(wr, l, ctx, tr, ws) {
         this.writer = wr;
@@ -131,9 +125,9 @@ class SmothnessWriter implements AttributeFiller {
         var dfSize = ctx.getFont().getDFSize();
         for (i in 0...tiles.length) {
             var tile = tiles[i];
-            var val = 2*dfSize / ( base * tile.scale );
+            var val = 2 * dfSize / ( base * tile.scale );
             for (j in 0...4) {
-                writer.setValue(target, start + j + i*4, val);
+                writer.setValue(target, start + j + i * 4, val);
             }
         }
     }

@@ -1,6 +1,6 @@
 package htext.style;
-import al.al2d.Axis2D;
-import al.al2d.Widget2D.AxisCollection2D;
+import macros.AVConstructor;
+import Axis2D;
 import font.bmf.BMFont.BMFontFactory;
 import font.FontStorage;
 import htext.Align;
@@ -20,9 +20,9 @@ class TextContextBuilder implements TextContextStorage {
     var fonts(default, null) = new FontStorage(new BMFontFactory());
     var layouterFactory(default, null):CharsLayouterFactory;
     var fontScale:FontScale;
-    var pivot:AxisCollection2D<TextPivot> = new AxisCollection2D();
-    var padding:AxisCollection2D<Padding> = new AxisCollection2D();
-    var align:AxisCollection2D<Align> = new AxisCollection2D();
+    var pivot:AVector2D<TextPivot>;
+    var padding:AVector2D<Padding>;
+    var align:AVector2D<Align>;
     var fontName = "";
 
     public function new(fonts:FontStorage, ar) {
@@ -30,14 +30,9 @@ class TextContextBuilder implements TextContextStorage {
         this.ar = ar;
         this.layouterFactory = new H2dRichCharsLayouterFactory(fonts);
         this.fontScale = new FitFontScale(0.75);
-        pivot[horizontal] = new ForwardPivot();
-        pivot[vertical] = new ForwardPivot();
-
-        padding[horizontal] = new SamePadding(0);
-        padding[vertical] = new SamePadding(0);
-
-        align[horizontal] = Forward;
-        align[vertical] = Forward;
+        pivot = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
+        padding = AVConstructor.create(new SamePadding(0), new SamePadding(0));
+        align = AVConstructor.create(Forward, Forward);
     }
 
     public function withPadding(a:Axis2D, v) {

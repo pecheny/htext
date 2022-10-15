@@ -1,12 +1,12 @@
 package htext.style;
-import Axis;
+import Axis2D;
 
 interface FontScale {
     function getValue(tr:Location2D):Float;
 }
 
 class ScreenPercentHeightFontHeightCalculator implements FontScale {
-    var ar:ROAxisCollection2D<Float>;
+    var ar:ReadOnlyAVector2D<Float>;
     var base:Float;
 
     public function new(ar, base = 0.25) {
@@ -20,8 +20,8 @@ class ScreenPercentHeightFontHeightCalculator implements FontScale {
 }
 
 class PixelFontHeightCalculator implements FontScale {
-    var ar:ROAxisCollection2D<Float>;
-    var windowSize:ROAxisCollection2D<Int>;
+    var ar:ReadOnlyAVector2D<Float>;
+    var windowSize:ReadOnlyAVector2D<Int>;
     var px:Float;
 
     public function new(ar, ws, px) {

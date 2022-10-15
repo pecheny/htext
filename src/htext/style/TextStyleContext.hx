@@ -1,5 +1,5 @@
 package htext.style;
-import Axis;
+import Axis2D;
 import font.FontInstance;
 import font.FontStorage;
 import font.IFont;
