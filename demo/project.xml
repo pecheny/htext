@@ -3,8 +3,9 @@
     <meta title="Sample" package="org.al.example" version="1.0.0" company="pecheny"/>
     <app main="TextDemo" path="Export" file="layout-example"/>
     <window background="#303030" fps="60" orientation="portrait"/>
-    <source path="../src"/>
     <source path="src"/>
+    <source path="../src"/>
+    <haxelib name="taxis"/>
     <haxelib name="openfl"/>
     <assets path="Assets" include="*"/>
 </project>
