@@ -28,6 +28,7 @@ class TextDemo extends Sprite {
     public function new() {
         super();
         fonts.initFont("", "Assets/RobotoSlab.fnt");
+        fonts.initFont("bold", "Assets/RobotoSlab-bold.fnt");
         var lfac = new H2dRichCharsLayouterFactory(fonts);
         var pivot:AVector2D<TextPivot> = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
         var padding:AVector2D<Padding> = AVConstructor.create(new SamePadding(0), new SamePadding(0));
@@ -38,7 +39,7 @@ class TextDemo extends Sprite {
         var l = textStyleContext.createLayouter();
         var rend = new OpenflTextRender(l, new Transformer(), bd);
         addChild(rend);
-        rend.setText("Foo bar <br/>baz ban");
+        rend.setText("Foo <b>bar</b> <br/>baz ban");
     }
 }
 

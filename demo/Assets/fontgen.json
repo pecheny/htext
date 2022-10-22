@@ -1,9 +1,7 @@
 [
     {
-        "inputs": [
-            "RobotoSlab-Regular.ttf"
-        ],
-        "output": "RobotoSlab.fnt",
+        "share": true,
+        "pngName":"atlas.png",
         "charset": [
             "latin"
         ],
@@ -20,5 +18,17 @@
             "y": 2
         },
         "mode": "raster"
+    },
+    {
+        "inputs": [
+            "RobotoSlab-Regular.ttf"
+        ],
+        "output": "RobotoSlab.fnt"
+    },
+    {
+        "inputs": [
+            "RobotoSlab-Bold.ttf"
+        ],
+        "output": "RobotoSlab-bold.fnt"
     }
 ]
