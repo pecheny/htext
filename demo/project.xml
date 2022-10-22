@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-    <meta title="Sample" package="org.al.example" version="1.0.0" company="pecheny"/>
-    <app main="TextDemo" path="Export" file="layout-example"/>
+    <meta title="Sample" package="org.htext.example" version="1.0.0" company="pecheny"/>
+    <app main="TextDemo" path="Export" file="htext-example"/>
     <window background="#303030" fps="60" orientation="portrait"/>
     <source path="src"/>
     <source path="../src"/>
