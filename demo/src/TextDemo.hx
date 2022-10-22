@@ -1,15 +1,10 @@
 package;
 
 import Axis2D;
-import macros.AVConstructor;
-import htext.style.Pivot;
-import htext.style.Padding;
 import flash.display.BitmapData;
 import font.bmf.BMFont.BMFontFactory;
 import font.FontStorage;
 import font.GLGlyphData;
-import haxe.ds.ReadOnlyArray;
-import haxe.io.Bytes;
 import htext.Align;
 import htext.h2d.H2dTextLayouter.H2dRichCharsLayouterFactory;
 import htext.style.Padding;
@@ -17,13 +12,12 @@ import htext.style.Pivot;
 import htext.style.Scale;
 import htext.style.TextStyleContext;
 import htext.TextLayouter;
+import macros.AVConstructor;
 import openfl.display.Sprite;
-import openfl.events.Event;
 import openfl.Vector;
 
 class TextDemo extends Sprite {
     public var fonts(default, null) = new FontStorage(new BMFontFactory());
-    public var ar = new StageAspectKeeper(1);
 
     public function new() {
         super();
@@ -44,7 +38,7 @@ class TextDemo extends Sprite {
 }
 
 class OpenflTextRender extends Sprite {
-    var l:TextLayouter;
+    var layouter:TextLayouter;
     var vertices = new Vector<Float>();
     var indices = new Vector<Int>();
     var uvtData = new Vector<Float>();
@@ -54,18 +48,18 @@ class OpenflTextRender extends Sprite {
 
     public function new(l, tr, bd) {
         super();
-        this.l = l;
+        this.layouter = l;
         this.bd = bd;
         this.transformer = tr;
     }
 
     public function setText(t:String) {
-        l.setText(t);
+        layouter.setText(t);
         graphics.clear();
         vertices.length = 0;
-        indices = forQuads(l.getTiles().length);
+        indices = forQuads(layouter.getTiles().length);
 
-        for (tile in l.getTiles()) {
+        for (tile in layouter.getTiles()) {
             setChar(tile);
         }
 
@@ -106,53 +100,5 @@ class Transformer {
 
     public function transformValue(a, v:Float) {
         return 100 + v * 24;
-    }
-}
-
-class StageAspectKeeper {
-    var base:Float;
-
-    public var aspects = AVConstructor.create(Axis2D, 1., 1.);
-    public var size = AVConstructor.create(Axis2D, 1, 1);
-    public var pos = AVConstructor.create(Axis2D, 0., 0.);
-
-    var width:Float;
-    var height:Float;
-
-    public function new(base:Float = 1) {
-        this.base = base;
-        openfl.Lib.current.stage.addEventListener(Event.RESIZE, onResize);
-        onResize(null);
-    }
-
-    function onResize(e) {
-        var stage = openfl.Lib.current.stage;
-        width = stage.stageWidth;
-        height = stage.stageHeight;
-        size[horizontal] = stage.stageWidth;
-        size[vertical] = stage.stageHeight;
-        if (width > height) {
-            aspects[horizontal] = (base * width / height);
-            aspects[vertical] = base;
-        } else {
-            aspects[horizontal] = base;
-            aspects[vertical] = (base * height / width);
-        }
-    }
-
-    public inline function getFactor(cmp:Axis2D):Float {
-        return aspects[cmp];
-    }
-
-    public function getFactorsRef():ReadOnlyAVector2D<Float> {
-        return aspects;
-    }
-
-    public function getWindowSize():ReadOnlyAVector2D<Int> {
-        return size;
-    }
-
-    public function getValue(a:Axis2D):Float {
-        return if (a == horizontal) width else height;
     }
 }
