@@ -1,4 +1,5 @@
 package htext.style;
+import a2d.Stage;
 import macros.AVConstructor;
 import Axis2D;
 import font.bmf.BMFont.BMFontFactory;
@@ -16,7 +17,7 @@ interface TextContextStorage {
 
 class TextContextBuilder implements TextContextStorage {
     public static inline var DEFAULT_STYLE = 'default';
-    var ar:StageAspectKeeper;
+    var ar:Stage;
     var fonts(default, null) = new FontStorage(new BMFontFactory());
     var layouterFactory(default, null):CharsLayouterFactory;
     var fontScale:FontScale;
