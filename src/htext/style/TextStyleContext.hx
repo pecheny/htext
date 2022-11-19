@@ -13,9 +13,9 @@ class TextStyleContext {
     var font:FontInstance<IFont>;
     var defaultFontName:String;
     var fontScale:FontScale;
-    var pivot:AxisCollection2D<TextPivot>;
-    var padding:AxisCollection2D<Padding>;
-    var align:AxisCollection2D<Align>;
+    var pivot:AVector2D<TextPivot>;
+    var padding:AVector2D<Padding>;
+    var align:AVector2D<Align>;
 
     public function new(lf, fonts:FontStorage, defaultFont:String, scale, pivot, padding, align) {
         this.layouterFactory = lf;

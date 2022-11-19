@@ -22,7 +22,7 @@ class TextRender<T:AttribSet> implements Renderable<T> {
     static var indices:IndexCollection;
     var value = "";
     var efficientLen = 0;
-    var charPos:AxisCollection2D<Float> = AVConstructor.create(0.,0.);
+    var charPos:AVector2D<Float> = AVConstructor.create(0.,0.);
     var transformer:TransformerBase;
     var stageHeight = 1;
     var charsLayouter:TextLayouter;
