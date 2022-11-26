@@ -13,7 +13,6 @@ import haxe.io.Bytes;
 import htext.style.TextStyleContext;
 import htext.TextLayouter;
 import Location2D;
-import macros.AVConstructor;
 import transform.TransformerBase;
 import utils.DynamicBytes;
 
@@ -22,9 +21,7 @@ class TextRender<T:AttribSet> implements Renderable<T> {
     static var indices:IndexCollection;
     var value = "";
     var efficientLen = 0;
-    var charPos:AVector2D<Float> = AVConstructor.create(0.,0.);
     var transformer:TransformerBase;
-    var stageHeight = 1;
     var charsLayouter:TextLayouter;
     var bytes = new DynamicBytes(512);
     var attrs:T;
@@ -46,27 +43,26 @@ class TextRender<T:AttribSet> implements Renderable<T> {
     }
 
     inline function setChar(at:Int, rec:TileRecord) {
-        var glyph:GLGlyphData = rec.tile;
         var vertOfs = at * 4;
-        var targ = bytes.bytes;
-        var vertexOffset = 0;
-        charPos[horizontal] = rec.x;
-        charPos[vertical] = rec.y;
         for (i in 0...4) {
-            posWriter[horizontal].setValue(targ, vertOfs + i, transformer.transformValue(horizontal, (charPos[horizontal] + rec.scale * glyph.getLocalPosOffset(i, 0))));
-            posWriter[vertical].setValue(targ, vertOfs + i, transformer.transformValue(vertical, (charPos[vertical] + rec.scale * ( glyph.getLocalPosOffset(i, 1) ) )));
-            uvWriter[horizontal].setValue(targ, vertOfs + i, glyph.getUV(i, 0));
-            uvWriter[vertical].setValue(targ, vertOfs + i, glyph.getUV(i, 1));
+            setVert(rec, horizontal, i, vertOfs);
+            setVert(rec, vertical, i, vertOfs);
         }
-//        var sssize = Math.abs(posWriter[vertical].getValue(targ, vertOfs + 1) - posWriter[vertical].getValue(targ, vertOfs));
-//        var screenDy = sssize * stageHeight / 2;// gl screen space (?)
-//        var smoothness = DummyEditorField.value;//calculateGradientSize(rec, screenDy);
+    }
 
+    inline function setVert(rec:TileRecord, a:Axis2D, vert:Int, vertOfs) {
+        var targ = bytes.bytes;
+        posWriter[a].setValue(targ, vertOfs + vert, getVertPos(rec, a, vert));
+        uvWriter[a].setValue(targ, vertOfs + vert, rec.tile.getUV(vert, a));
+    }
+
+    inline function getVertPos(rec:TileRecord, a:Axis2D, vert:Int) {
+        var locPos = rec.pos[a] + rec.scale * rec.tile.getLocalPosOffset(vert, a);
+        return transformer.transformValue(a, locPos);
     }
 
 
     public function setText(s:String) {
-        stageHeight = openfl.Lib.current.stage.stageHeight ;
         value = s;
         setDirty();
     }
