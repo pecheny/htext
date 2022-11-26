@@ -1,4 +1,6 @@
 package font;
+import Axis2D;
+import macros.AVConstructor;
 class GLGlyphData {
     var advance:Float;
     var atlasScale:Float;
@@ -45,8 +47,9 @@ typedef Rect = {
 
 
 class TileRecord {
-    public var x:Float;
-    public var y:Float;
+    public var pos(default,null) = AVConstructor.create(Axis2D, 0., 0.);
+    public var x(get,set):Float;
+    public var y(get,set):Float;
     public var scale = 1.;
     public var tile:GLGlyphData;
     public var dfSize:Int = 1;  // cant be 0 for msdf and for use in TextGraphicElement
@@ -57,6 +60,22 @@ class TileRecord {
         this.scale = s;
         this.tile = t;
         this.dfSize = df;
+    }
+
+    inline function get_x():Float {
+        return pos[Axis2D.horizontal];
+    }
+
+    inline function set_x(value:Float):Float {
+        return pos[Axis2D.horizontal] = value;
+    }
+
+    inline function get_y():Float {
+        return pos[Axis2D.vertical];
+    }
+
+    inline function set_y(value:Float):Float {
+        return pos[Axis2D.vertical] = value;
     }
 }
 
