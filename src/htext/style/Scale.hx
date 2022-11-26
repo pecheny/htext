@@ -5,6 +5,7 @@ interface FontScale {
     function getValue(tr:Location2D):Float;
 }
 
+
 class ScreenPercentHeightFontHeightCalculator implements FontScale {
     var ar:ReadOnlyAVector2D<Float>;
     var base:Float;

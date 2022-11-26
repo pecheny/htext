@@ -1,6 +1,5 @@
 package htext.style;
 import a2d.Stage;
-import macros.AVConstructor;
 import Axis2D;
 import font.bmf.BMFont.BMFontFactory;
 import font.FontStorage;
@@ -10,6 +9,17 @@ import htext.style.Padding;
 import htext.style.Pivot;
 import htext.style.Scale;
 import htext.TextLayouter.CharsLayouterFactory;
+import macros.AVConstructor;
+
+
+@:enum abstract ScreenMeasureUnit(Axis<ScreenMeasureUnit>) to Axis<ScreenMeasureUnit> to Int {
+    /** Size inpixels */
+    var px;
+    /** Fraction of smallest screen side */
+    var sfr;
+    /** Fraction of the parent. */
+    var pfr;
+}
 
 interface TextContextStorage {
     function getStyle(name:String):TextStyleContext;
@@ -25,19 +35,22 @@ class TextContextBuilder implements TextContextStorage {
     var padding:AVector2D<Padding>;
     var align:AVector2D<Align>;
     var fontName = "";
+    var identityMeasureUnits:AVector<ScreenMeasureUnit, FontScale>;
+
 
     public function new(fonts:FontStorage, ar) {
         this.fonts = fonts;
         this.ar = ar;
         this.layouterFactory = new H2dRichCharsLayouterFactory(fonts);
         this.fontScale = new FitFontScale(0.75);
+        identityMeasureUnits = AVConstructor.factoryCreate(u -> createSizeApplier(u, 1));
         pivot = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
-        padding = AVConstructor.create(new SamePadding(0), new SamePadding(0));
+        padding = AVConstructor.create(new SamePadding(0, identityMeasureUnits[sfr]), new SamePadding(0, identityMeasureUnits[sfr]));
         align = AVConstructor.create(Forward, Forward);
     }
 
-    public function withPadding(a:Axis2D, v) {
-        padding[a] = new SamePadding(v);
+    public function withPadding(a:Axis2D, units:ScreenMeasureUnit, v:Float) {
+        padding[a] = new SamePadding(v, identityMeasureUnits[units]);
         return this;
     }
 
@@ -67,20 +80,33 @@ class TextContextBuilder implements TextContextStorage {
         return this;
     }
 
-    public function withSizeInPixels(px:Int) {
-        fontScale = new PixelFontHeightCalculator(ar.getFactorsRef(), cast ar.getWindowSize(), px);
+    public function withSize(units:ScreenMeasureUnit, val) {
+        fontScale = createSizeApplier(units, val);
         return this;
     }
 
-    public function withPercentFontScale(p) {
-        fontScale = new ScreenPercentHeightFontHeightCalculator(ar.getFactorsRef(), p);
-        return this;
+    inline function createSizeApplier(units, val) {
+        return switch units {
+            case sfr:new ScreenPercentHeightFontHeightCalculator(ar.getFactorsRef(), val);
+            case pfr:new FitFontScale(val);
+            case px:new PixelFontHeightCalculator(ar.getFactorsRef(), cast ar.getWindowSize(), val);
+        }
     }
 
-    public function withFitFontScale(p) {
-        fontScale = new FitFontScale(p);
-        return this;
-    }
+//    public function withSizeInPixels(px:Int) {
+//        fontScale = new PixelFontHeightCalculator(ar.getFactorsRef(), cast ar.getWindowSize(), px);
+//        return this;
+//    }
+//
+//    public function withPercentFontScale(p) {
+//        fontScale = new ScreenPercentHeightFontHeightCalculator(ar.getFactorsRef(), p);
+//        return this;
+//    }
+//
+//    public function withFitFontScale(p) {
+//        fontScale = new FitFontScale(p);
+//        return this;
+//    }
 
 
     // ===== storage ====

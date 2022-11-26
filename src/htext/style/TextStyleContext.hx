@@ -47,15 +47,15 @@ class TextStyleContext {
 
     public function getPivot(a:Axis2D, transform:Location2D) {
         var offset = switch align[a] {
-            case Forward : padding[a].getMain();
-            case Backward : padding[a].getSecondary();
+            case Forward : padding[a].getMain(transform);
+            case Backward : padding[a].getSecondary(transform);
             case Center : 0;
         }
         return offset + pivot[a].getPivot(a, transform, this);
     }
 
     public function getContentSize(a:Axis2D, transform:Location2D) {
-        return transform.size[a] - padding[a].getTotal();
+        return transform.size[a] - padding[a].getTotal(transform);
     }
 
 }
