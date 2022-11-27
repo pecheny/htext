@@ -87,19 +87,19 @@ class TextContextBuilder implements TextContextStorage {
 
     inline function createSizeApplier(units, val) {
         return switch units {
-            case sfr:new ScreenPercentHeightFontHeightCalculator(ar.getFactorsRef(), val);
+            case sfr:new ScreenPercentHeightFontHeightCalculator(ar.getAspectRatio(), val);
             case pfr:new FitFontScale(val);
-            case px:new PixelFontHeightCalculator(ar.getFactorsRef(), cast ar.getWindowSize(), val);
+            case px:new PixelFontHeightCalculator(ar.getAspectRatio(), cast ar.getWindowSize(), val);
         }
     }
 
 //    public function withSizeInPixels(px:Int) {
-//        fontScale = new PixelFontHeightCalculator(ar.getFactorsRef(), cast ar.getWindowSize(), px);
+//        fontScale = new PixelFontHeightCalculator(ar.getAspectRatio(), cast ar.getWindowSize(), px);
 //        return this;
 //    }
 //
 //    public function withPercentFontScale(p) {
-//        fontScale = new ScreenPercentHeightFontHeightCalculator(ar.getFactorsRef(), p);
+//        fontScale = new ScreenPercentHeightFontHeightCalculator(ar.getAspectRatio(), p);
 //        return this;
 //    }
 //
