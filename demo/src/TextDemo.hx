@@ -2,19 +2,19 @@ package;
 
 import Axis2D;
 import flash.display.BitmapData;
-import font.bmf.BMFont.BMFontFactory;
 import font.FontStorage;
 import font.GLGlyphData;
+import font.bmf.BMFont.BMFontFactory;
 import htext.Align;
+import htext.TextLayouter;
 import htext.h2d.H2dTextLayouter.H2dRichCharsLayouterFactory;
 import htext.style.Padding;
 import htext.style.Pivot;
 import htext.style.Scale;
 import htext.style.TextStyleContext;
-import htext.TextLayouter;
 import macros.AVConstructor;
-import openfl.display.Sprite;
 import openfl.Vector;
+import openfl.display.Sprite;
 
 class TextDemo extends Sprite {
     public var fonts(default, null) = new FontStorage(new BMFontFactory());
@@ -25,7 +25,8 @@ class TextDemo extends Sprite {
         fonts.initFont("bold", "Assets/RobotoSlab-bold.fnt");
         var lfac = new H2dRichCharsLayouterFactory(fonts);
         var pivot:AVector2D<TextPivot> = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
-        var padding:AVector2D<Padding> = AVConstructor.create(new SamePadding(0), new SamePadding(0));
+        var padding:AVector2D<Padding> = AVConstructor.create(new SamePadding(0, new FitFontScale(horizontal)),
+            new SamePadding(0, new FitFontScale(vertical)));
         var align:AVector2D<Align> = AVConstructor.create(Forward, Forward);
 
         var textStyleContext = new TextStyleContext(lfac, fonts, "", new FitFontScale(120), pivot, padding, align);
