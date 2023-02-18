@@ -1,0 +1,14 @@
+{
+  "name": "htext",
+  "url": "https://github.com/pecheny/htext",
+  "license": "MIT",
+  "tags": ["atlas", "text", "bitmap", "font" ],
+  "description": "Bitmap text layout engine",
+  "version": "1.0.0",
+  "releasenote": "Initial release.",
+  "classPath": "src",
+  "contributors": [
+    "pecheny"
+  ]
+}
+ 
