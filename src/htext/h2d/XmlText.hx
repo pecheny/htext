@@ -182,7 +182,7 @@ class XmlText<T:FontChar2> extends Text<T> {
         sizePos = 0;
         calcYMin = 0;
 
-        var metrics:Array<LineInfo> = [ makeLineInfo(0, font.getLineHeight(), font.getLineHeight()) ];
+        var metrics:Array<LineInfo> = [ makeLineInfo(0, font.getLineHeight(), font.getBaseline()) ];
         prevChar = CharAccess.EMPTY;
         newLine = true;
         var splitNode:SplitNode = {
@@ -246,9 +246,11 @@ class XmlText<T:FontChar2> extends Text<T> {
         }
         if (e.nodeType == Xml.Element) {
 
+            // var lineHeight = 0.;
             inline function makeLineBreak() {
                 var fontInfo = lineFont();
-                metrics.push(makeLineInfo(0, fontInfo.getLineHeight(), fontInfo.getLineHeight()));
+                // var h = lineHeight != 0 ? lineHeight : fontInfo.getLineHeight();
+                metrics.push(makeLineInfo(0, fontInfo.getLineHeight(), fontInfo.getBaseline()));
                 splitNode.node = null;
                 newLine = true;
                 prevChar = CharAccess.EMPTY;
@@ -267,6 +269,7 @@ class XmlText<T:FontChar2> extends Text<T> {
                         var v = e.get(a);
                         switch( a.toLowerCase() ) {
                             case "face": font = loadFont(v);
+                            // case "lineheight": lineHeight = Std.parseFloat(v);
                             default:
                         }
                     }
@@ -348,7 +351,7 @@ class XmlText<T:FontChar2> extends Text<T> {
                 if (newline) {
                     metrics.push(makeLineInfo(x, info.height, info.baseLine));
                     info.height = fontInfo.getLineHeight();
-                    info.baseLine = fontInfo.getLineHeight();
+                    info.baseLine = fontInfo.getBaseline();
                     x = 0;
                     prevChar = CharAccess.EMPTY;
                     newLine = true;
@@ -370,7 +373,7 @@ class XmlText<T:FontChar2> extends Text<T> {
             }
 
             if (newLine || metrics.length == 0) {
-                metrics.push(makeLineInfo(0, fontInfo.getLineHeight(), fontInfo.getLineHeight()));
+                metrics.push(makeLineInfo(0, fontInfo.getLineHeight(), fontInfo.getBaseline()));
                 textSplit.push("");
             }
             // Save node value
@@ -424,7 +427,7 @@ class XmlText<T:FontChar2> extends Text<T> {
 		*/
 
         var splitNode:SplitNode = { node: null, font: font, width: 0, height: 0, baseLine: 0, pos: 0, prevChar: CharAccess.EMPTY };
-        var metrics = [makeLineInfo(0, font.getLineHeight(), font.getLineHeight())];
+        var metrics = [makeLineInfo(0, font.getLineHeight(), font.getBaseline())];
         prevChar = CharAccess.EMPTY;
         newLine = true;
 
@@ -594,12 +597,13 @@ class XmlText<T:FontChar2> extends Text<T> {
         } else if (e.nodeValue.length != 0) {
             newLine = false;
             var t:CharAccess = e.nodeValue;
-            var dy = ( metrics[sizePos].baseLine - font.getLineHeight() ) * scale;
+            var dy = ( metrics[sizePos].baseLine - font.getBaseline() ) * scale;
             for (i in 0...t.length) {
                 var cc = t.at(i);
                 if (cc == "\n".code) {
                     makeLineBreak();
-//					dy = metrics[sizePos].baseLine - font.getLineHeight();
+                    //todo why commented
+					// dy = metrics[sizePos].baseLine - font.getBaseline();
                     prevChar = CharAccess.EMPTY;
                     continue;
                 }

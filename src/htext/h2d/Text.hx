@@ -41,6 +41,7 @@ typedef TileGroup<T:FontChar2> = {
 typedef IFont = {
 	function getChar(ch:Char):FontChar2;
 	function getLineHeight():Float;
+	function getBaseline():Float;
 	function getKerningOffset(prevChar:Char, char:Char) :Float;
 	function getDFSize():Int;
 }
@@ -462,7 +463,7 @@ class Text<T:FontChar2> {
 		calcYMin = yMin;
 		calcWidth = xMax - xMin;
 		calcHeight = y + font.getLineHeight();
-		calcSizeHeight = y + font.getLineHeight();
+        calcSizeHeight = y + (font.getBaseline() > 0 ? font.getBaseline() : font.getLineHeight());
 		calcDone = true;
 		if (rebuild)
 			needsRebuild = false;
