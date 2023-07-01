@@ -42,6 +42,10 @@ class TextContextBuilder implements TextContextStorage {
         this.fonts = fonts;
         this.ar = ar;
         this.layouterFactory = new H2dRichCharsLayouterFactory(fonts);
+        resetToDefaults();
+    }
+
+    public inline function resetToDefaults() {
         this.fontScale = new FitFontScale(0.75);
         identityMeasureUnits = AVConstructor.factoryCreate(u -> createSizeApplier(u, 1));
         pivot = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
@@ -134,6 +138,8 @@ class TextContextBuilder implements TextContextStorage {
     }
 
     public function getStyle(name) {
+        if (!styles.exists(name))
+            throw 'there is no text style $name';
         return styles[name];
     }
 
