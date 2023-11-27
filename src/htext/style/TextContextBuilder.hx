@@ -134,6 +134,8 @@ class TextContextBuilder implements TextContextStorage {
             styles[name] = tc;
             name = "";
         }
+        if (!styles.exists(DEFAULT_STYLE))
+            styles[DEFAULT_STYLE] = tc;
         return tc;
     }
 
