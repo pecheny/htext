@@ -19,6 +19,8 @@ import macros.AVConstructor;
     var sfr;
     /** Fraction of the parent. */
     var pfr;
+    /** Fraction of the height. */
+    var hfr;
 }
 
 interface TextContextStorage {
@@ -91,7 +93,8 @@ class TextContextBuilder implements TextContextStorage {
 
     inline function createSizeApplier(units, val) {
         return switch units {
-            case sfr:new ScreenPercentHeightFontHeightCalculator(ar.getAspectRatio(), val);
+            case sfr:new ScreenPercentSmallSideFontHeightCalculator(ar.getAspectRatio(), val);
+            case hfr:new ScreenPercentHeightFontHeightCalculator(ar.getAspectRatio(), val);
             case pfr:new FitFontScale(val);
             case px:new PixelFontHeightCalculator(ar.getAspectRatio(), cast ar.getWindowSize(), val);
         }
