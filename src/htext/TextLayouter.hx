@@ -7,7 +7,8 @@ interface TextLayouter {
     function setText(val:String):Void;
     function getTiles():ReadOnlyArray<TileRecord>;
     function setWidthConstraint(val:Float):Void;
-    function setTextAlign(align:Align):Void;
+    function setTextAlign(align:Align, valign:Align = Center):Void;
+    function calculateVertOffset():Float ;
 }
 
 interface CharsLayouterFactory {

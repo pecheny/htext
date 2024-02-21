@@ -90,6 +90,7 @@ class XmlText<T:FontChar2> extends Text<T> {
 	**/
     public var imageVerticalAlign(default, set):ImageVerticalAlign = Bottom;
 
+    public var numLines (default, null):Int = 0;
     var xPos:Float;
     var yPos:Float;
     var xMax:Float;
@@ -99,6 +100,7 @@ class XmlText<T:FontChar2> extends Text<T> {
     var prevChar:Char = CharAccess.EMPTY;
     var newLine:Bool;
     var aHrefs:Array<String>;
+    
 //	var aInteractive : Interactive;
 
     /**
@@ -208,11 +210,12 @@ class XmlText<T:FontChar2> extends Text<T> {
 
         textXml = null;
 
-        var y = yPos;
+        var y:Float = yPos;
         calcXMin = xMin;
         calcWidth = xMax - xMin;
         calcHeight = y + metrics[sizePos].height;
         calcSizeHeight = y + metrics[sizePos].baseLine;//(font.baseLine > 0 ? font.baseLine : font.lineHeight);
+        numLines = metrics.length;
         calcDone = true;
         if (rebuild) needsRebuild = false;
     }

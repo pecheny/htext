@@ -29,7 +29,7 @@ class TextStyleContext {
 
     public function createLayouter() {
         var l = layouterFactory.create(defaultFontName);
-        l.setTextAlign(align[horizontal]) ;
+        l.setTextAlign(align[horizontal], align[vertical]) ;
         return l;
     }
 

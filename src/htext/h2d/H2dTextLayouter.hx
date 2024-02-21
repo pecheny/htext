@@ -1,4 +1,5 @@
 package htext.h2d;
+
 import font.FontStorage;
 import font.GLGlyphData.Glyphs;
 import font.GLGlyphData.TileRecord;
@@ -14,44 +15,39 @@ import htext.Align;
 class H2dTextLayouter implements TextLayouter {
     var text:Text<GLGlyphData>;
     var glyphs:Glyphs;
-
     public function new(f) {
         glyphs = new Glyphs();
         text = new Text(f, glyphs);
     }
-
     public function setText(val:String):Void {
         text.text = val;
         @:privateAccess text.updateSize();
     }
-
     public function getTiles():ReadOnlyArray<TileRecord> {
         return glyphs.tiles;
     }
-
     public function setWidthConstraint(val:Float):Void {
         text.constraintSize(val, -1);
     }
-
-    public function setTextAlign(align:Align){
-        text.textAlign =
-        switch align {
-            case Forward : H2dAlign.Left;
-            case Backward : H2dAlign.Right;
-            case Center : H2dAlign.Center;
+    public function setTextAlign(align:Align, valign = Center) {
+        text.textAlign = switch align {
+            case Forward: H2dAlign.Left;
+            case Backward: H2dAlign.Right;
+            case Center: H2dAlign.Center;
         };
     }
+    public function calculateVertOffset() {
+        // todo copy impl from H2dRich impl or extract it to common base class.
+        return 0.;
+    }
 }
-
 class H2dCharsLayouterFactory implements CharsLayouterFactory {
     var font:IFont;
-
     public function new(f) {
         this.font = f;
     }
-
     public function create(fname = ""):TextLayouter {
-        //todo do not ignore fname
+        // todo do not ignore fname
         return new H2dTextLayouter(font);
     }
 }
@@ -60,11 +56,15 @@ class H2dRichTextLayouter implements TextLayouter {
     var text:XmlText<GLGlyphData>;
     var glyphs:Glyphs;
     var fonts:FontStorage;
+    var lineHeight:Float;
+    var valign:Align;
 
     public function new(f, defaultFont = "") {
         fonts = f;
         glyphs = new Glyphs();
-        text = new XmlText(fonts.getFont(defaultFont).font, glyphs);
+        var ifont = fonts.getFont(defaultFont);
+        lineHeight = ifont.font.getLineHeight();
+        text = new XmlText(ifont.font, glyphs);
         text.defaultLoadFont = loadFont;
     }
 
@@ -88,13 +88,37 @@ class H2dRichTextLayouter implements TextLayouter {
         text.constraintSize(val, -1);
     }
 
-    public function setTextAlign(align:Align){
-        text.textAlign =
-        switch align {
-            case Forward : H2dAlign.Left;
-            case Backward : H2dAlign.Right;
-            case Center : H2dAlign.Center;
+    public function setTextAlign(align:Align, valign:Align = Center) {
+        text.textAlign = switch align {
+            case Forward: H2dAlign.Left;
+            case Backward: H2dAlign.Right;
+            case Center: H2dAlign.Center;
         };
+        this.valign = valign;
+    }
+
+    function ascent() {
+        return 0.8;
+    }
+
+    public function calculateVertOffset() {
+        var ln = text.numLines;
+        return switch valign {
+            case Forward: 0;
+            // pivot of the text lays on baseline of the first line.
+            // Desired behavior for odd num of lines is the middle of letters of central line lyes on the center of placeholder
+            // for even lines = center of the placeholder is somewhere between lrtters of two crntral lines
+            // not sure in this formula but it provides acceptable visual result on hardcoded ascent value (for Roboto Slab font)
+            // In proper way the ascent shoulld be in the IFont api but since BMF format doesnt store this data for now i'd keep it that way.
+            // I'l be back for this when other font i use will require other ascent val.
+            // also variable lineHeighs supported by XmlText would not look nice.
+
+            case Center:
+                var oddLinesMp = (ln % 2);
+                var evenLinesMp = (1 - ln % 2);
+                (( 0.25 * evenLinesMp) + (ascent() * oddLinesMp) + Math.floor(ln / 2) - 1) * lineHeight;
+            case Backward: lineHeight * (ln - 1);
+        }
     }
 }
 
