@@ -50,7 +50,7 @@ class TextContextBuilder implements TextContextStorage {
     public inline function resetToDefaults() {
         this.fontScale = new FitFontScale(0.75);
         identityMeasureUnits = AVConstructor.factoryCreate(u -> createSizeApplier(u, 1));
-        pivot = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
+        pivot = AVConstructor.create(null, null);
         padding = AVConstructor.create(new SamePadding(0, identityMeasureUnits[sfr]), new SamePadding(0, identityMeasureUnits[sfr]));
         align = AVConstructor.create(Forward, Forward);
     }
@@ -67,12 +67,6 @@ class TextContextBuilder implements TextContextStorage {
 
     public function withAlign(axis:Axis2D, a:Align) {
         this.align[axis] = a;
-        pivot[axis] =
-        switch a {
-            case Forward: new ForwardPivot();
-            case Backward: new BackwardPivot();
-            case Center: new MiddlePivot();
-        }
         return this;
     }
 

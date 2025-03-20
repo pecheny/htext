@@ -9,6 +9,7 @@ import htext.style.Scale;
 import htext.TextLayouter.CharsLayouterFactory;
 
 class TextStyleContext {
+    static final DEFAULT_PIVOTS = [Forward => new ForwardPivot(), Center => new MiddlePivot(), Backward => new BackwardPivot()];
     var layouterFactory(default, null):CharsLayouterFactory;
     var font:FontInstance<IFont>;
     var defaultFontName:String;
@@ -45,13 +46,15 @@ class TextStyleContext {
         return fontScale.getValue(tr);
     }
 
-    public function getPivot(a:Axis2D, transform:Location2D) {
-        var offset = switch align[a] {
+    public function getPivot(a:Axis2D, transform:Location2D, ?alignOver:Align) {
+        var align = alignOver ?? this.align[a];
+        var pivot = this.pivot[a] ?? DEFAULT_PIVOTS[align];
+        var offset = switch align {
             case Forward : padding[a].getMain(transform);
             case Backward : padding[a].getSecondary(transform);
             case Center : 0;
         }
-        return offset + pivot[a].getPivot(a, transform, this);
+        return offset + pivot.getPivot(a, transform, this);
     }
 
     public function getContentSize(a:Axis2D, transform:Location2D) {
