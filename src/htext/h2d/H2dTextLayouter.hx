@@ -29,7 +29,7 @@ class H2dTextLayouter implements TextLayouter {
     public function setWidthConstraint(val:Float):Void {
         text.constraintSize(val, -1);
     }
-    public function setTextAlign(align:Align, valign = Center) {
+    public function setTextAlign(align:Align, ?valign) {
         text.textAlign = switch align {
             case Forward: H2dAlign.Left;
             case Backward: H2dAlign.Right;
@@ -57,7 +57,7 @@ class H2dRichTextLayouter implements TextLayouter {
     var glyphs:Glyphs;
     var fonts:FontStorage;
     var lineHeight:Float;
-    var valign:Align;
+    var valign:Align = Center;
 
     public function new(f, defaultFont = "") {
         fonts = f;
@@ -88,13 +88,14 @@ class H2dRichTextLayouter implements TextLayouter {
         text.constraintSize(val, -1);
     }
 
-    public function setTextAlign(align:Align, valign:Align = Center) {
+    public function setTextAlign(align:Align, ?valign:Align) {
         text.textAlign = switch align {
             case Forward: H2dAlign.Left;
             case Backward: H2dAlign.Right;
             case Center: H2dAlign.Center;
         };
-        this.valign = valign;
+        if (valign != null)
+            this.valign = valign;
     }
 
     function ascent() {
