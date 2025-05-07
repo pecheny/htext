@@ -79,13 +79,13 @@ class TileRecord {
     }
 }
 
-class Glyphs {
-    public var tiles(default, null):Array<TileRecord> = [];
+class Glyphs<T:TileRecord> {
+    public var tiles(default, null):Array<T> = [];
 
     public function new() {}
 
     public function add(v, x, y, scale = 1., dfSize = 2) {
-        tiles.push(new TileRecord(v, x, y,  scale, dfSize));
+        tiles.push(cast new TileRecord(v, x, y,  scale, dfSize));
     }
 
     public function clear() {

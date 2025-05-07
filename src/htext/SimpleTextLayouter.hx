@@ -38,7 +38,7 @@ class SimpleTextLayouter {
     public var text(default, set):String;
     var x:Float = 0.;
     var y = 0.;
-    var glyphs:Glyphs;
+    var glyphs:Glyphs<TileRecord>;
     var font:IFont;
 
 

@@ -12,9 +12,9 @@ import htext.TextLayouter;
 import htext.h2d.Text.Align as H2dAlign;
 import htext.Align;
 
-class H2dTextLayouter implements TextLayouter {
+class H2dTextLayouter implements TextLayouter<TileRecord> {
     var text:Text<GLGlyphData>;
-    var glyphs:Glyphs;
+    var glyphs:Glyphs<TileRecord>;
     public function new(f) {
         glyphs = new Glyphs();
         text = new Text(f, glyphs);
@@ -46,22 +46,22 @@ class H2dCharsLayouterFactory implements CharsLayouterFactory {
     public function new(f) {
         this.font = f;
     }
-    public function create(fname = ""):TextLayouter {
+    public function create<T:TileRecord>(fname = "", _:Void->Glyphs<T> = null):TextLayouter<T>{
         // todo do not ignore fname
-        return new H2dTextLayouter(font);
+        return cast new H2dTextLayouter(font);
     }
 }
 
-class H2dRichTextLayouter implements TextLayouter {
+class H2dRichTextLayouter<T:TileRecord> implements TextLayouter<T> {
     var text:XmlText<GLGlyphData>;
-    var glyphs:Glyphs;
+    var glyphs:Glyphs<T>;
     var fonts:FontStorage;
     var lineHeight:Float;
     var valign:Align = Center;
 
-    public function new(f, defaultFont = "") {
+    public function new(f, defaultFont = "", glyphs) {
         fonts = f;
-        glyphs = new Glyphs();
+        this.glyphs = glyphs;
         var ifont = fonts.getFont(defaultFont);
         lineHeight = ifont.font.getLineHeight();
         text = new XmlText(ifont.font, glyphs);
@@ -80,7 +80,7 @@ class H2dRichTextLayouter implements TextLayouter {
         @:privateAccess text.updateSize();
     }
 
-    public function getTiles():ReadOnlyArray<TileRecord> {
+    public function getTiles():ReadOnlyArray<T> {
         return glyphs.tiles;
     }
 
@@ -130,7 +130,8 @@ class H2dRichCharsLayouterFactory implements CharsLayouterFactory {
         this.fonts = f;
     }
 
-    public function create(f = ""):TextLayouter {
-        return new H2dRichTextLayouter(fonts, f);
+    public function create<T:TileRecord>(f = "", fac:Void->Glyphs<T>=null):TextLayouter<T> {
+        var glyphs = if (fac == null) new Glyphs() else fac();
+        return new H2dRichTextLayouter(fonts, f, glyphs);
     }
 }
