@@ -40,13 +40,18 @@ enum ImageVerticalAlign {
 	**/
     Middle;
 }
+typedef XmlNodeProcessor = {
+    public function pushNode(e:Xml) :Void;
+}
+
+typedef XmlTileGroup<T:FontChar2> = TileGroup<T> & XmlNodeProcessor;
 
 /**
 	A simple HTML text renderer.
 
 	See the [Text](https://github.com/HeapsIO/heaps/wiki/Text) section of the manual for more details and a list of the supported HTML tags.
 **/
-class XmlText<T:FontChar2> extends Text<T> {
+class XmlText<T:FontChar2> extends Text<T, XmlTileGroup<T>> {
 
     /**
 		A default method HtmlText uses to load images for `<img>` tag. See `HtmlText.loadImage` for details.

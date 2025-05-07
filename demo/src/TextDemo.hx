@@ -22,6 +22,7 @@ class TextDemo extends Sprite {
     public function new() {
         super();
         fonts.initFont("", "Assets/RobotoSlab.fnt");
+        // fonts.initFont("", "Assets/raster.fnt");
         fonts.initFont("bold", "Assets/RobotoSlab-bold.fnt");
         var lfac = new H2dRichCharsLayouterFactory(fonts);
         var pivot:AVector2D<TextPivot> = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
@@ -34,12 +35,12 @@ class TextDemo extends Sprite {
         var l = textStyleContext.createLayouter();
         var rend = new OpenflTextRender(l, new Transformer(), bd);
         addChild(rend);
-        rend.setText("Foo <b>bar</b> <br/>baz ban");
+        rend.setText("ABCDEFGHIJabcdefghij <br/> <b>bar</b> <br/>baz ban");
     }
 }
 
 class OpenflTextRender extends Sprite {
-    var layouter:TextLayouter;
+    var layouter:TextLayouter<TileRecord>;
     var vertices = new Vector<Float>();
     var indices = new Vector<Int>();
     var uvtData = new Vector<Float>();
@@ -100,6 +101,6 @@ class Transformer {
     public function new() {}
 
     public function transformValue(a, v:Float) {
-        return 100 + v * 24;
+        return 100 + v * 48;
     }
 }

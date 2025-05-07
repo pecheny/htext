@@ -13,7 +13,7 @@ import htext.h2d.Text.Align as H2dAlign;
 import htext.Align;
 
 class H2dTextLayouter implements TextLayouter<TileRecord> {
-    var text:Text<GLGlyphData>;
+    var text:Text<GLGlyphData, Glyphs<TileRecord>>;
     var glyphs:Glyphs<TileRecord>;
     public function new(f) {
         glyphs = new Glyphs();
@@ -54,7 +54,7 @@ class H2dCharsLayouterFactory implements CharsLayouterFactory {
 
 class H2dRichTextLayouter<T:TileRecord> implements TextLayouter<T> {
     var text:XmlText<GLGlyphData>;
-    var glyphs:Glyphs<T>;
+    var glyphs:XmlGlyphs<T>;
     var fonts:FontStorage;
     var lineHeight:Float;
     var valign:Align = Center;
@@ -130,8 +130,11 @@ class H2dRichCharsLayouterFactory implements CharsLayouterFactory {
         this.fonts = f;
     }
 
+    // TODO As long as the layouter accepts XmlGlyphs, the @fac arg should be constrained as well
+    // to be returning XmlGlyphs. But it requires introduce typeparameter with constraints to the interface.
+    // For now, I leave a cast with hope the user passes the proper fac only.
     public function create<T:TileRecord>(f = "", fac:Void->Glyphs<T>=null):TextLayouter<T> {
-        var glyphs = if (fac == null) new Glyphs() else fac();
+        var glyphs = if (fac == null) new XmlGlyphs() else cast fac();
         return new H2dRichTextLayouter(fonts, f, glyphs);
     }
 }

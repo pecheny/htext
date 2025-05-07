@@ -79,6 +79,10 @@ class TileRecord {
     }
 }
 
+class XmlGlyphs<T:TileRecord> extends Glyphs<T>{
+    public function pushNode(e:Xml) :Void {}
+}
+
 class Glyphs<T:TileRecord> {
     public var tiles(default, null):Array<T> = [];
 

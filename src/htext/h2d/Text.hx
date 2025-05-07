@@ -33,6 +33,7 @@ abstract CharCodeAccess(String) from String to String {
 //typedef CharAccess = CharCodeAccess;
 typedef CharAccess = StrCharAccess;
 
+
 typedef TileGroup<T:FontChar2> = {
 	public function add(v:T, x:Float, y:Float, ?scale:Float, dfSize:Int ) :Void;
 	public function clear() :Void;
@@ -52,7 +53,7 @@ typedef FontChar2 = {
 	function getAdvance():Float;
 }
 
-class Text<T:FontChar2> {
+class Text<T:FontChar2, TG:TileGroup<T>> {
 	/**
 		The font used to render text.
 	**/
@@ -109,7 +110,7 @@ class Text<T:FontChar2> {
 
 	var charset = Charset.getDefault();
 
-	var glyphs:TileGroup<T>;
+	var glyphs:TG;
 	var needsRebuild:Bool;
 	var currentText:String;
 	var textChanged:Bool = true;
@@ -130,7 +131,7 @@ class Text<T:FontChar2> {
 		@param font The font used to render the Text.
 		@param parent An optional parent `h2d.Object` instance to which Text adds itself if set.
 	**/
-	public function new(font:IFont, target:TileGroup<T>) {
+	public function new(font:IFont, target:TG) {
 		glyphs = target;
 		this.font = font;
 		textAlign = Left;
