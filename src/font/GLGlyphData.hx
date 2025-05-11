@@ -79,8 +79,22 @@ class TileRecord {
     }
 }
 
-class XmlGlyphs<T:TileRecord> extends Glyphs<T>{
-    public function pushNode(e:Xml) :Void {}
+typedef XmlNodeHandler = Xml->(Void->Void);
+
+class XmlGlyphs<T:TileRecord> extends Glyphs<T> {
+    var nodeHandlers:Map<String, XmlNodeHandler> = new Map();
+    var stack:Array<Void->Void> = [];
+    public function pushNode(e:Xml):Void {
+        if (!nodeHandlers.exists(e.nodeName))
+            return;
+        stack.push(nodeHandlers.get(e.nodeName)(e));
+    }
+
+    public function popNode(e:Xml):Void {
+        if (!nodeHandlers.exists(e.nodeName))
+            return;
+        stack.pop()();
+    }
 }
 
 class Glyphs<T:TileRecord> {

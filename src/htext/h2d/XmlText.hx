@@ -42,6 +42,7 @@ enum ImageVerticalAlign {
 }
 typedef XmlNodeProcessor = {
     public function pushNode(e:Xml) :Void;
+    public function popNode(e:Xml) :Void;
 }
 
 typedef XmlTileGroup<T:FontChar2> = TileGroup<T> & XmlNodeProcessor;
@@ -523,6 +524,7 @@ class XmlText<T:FontChar2> extends Text<T, XmlTileGroup<T>> {
 //					createInteractive();
                         }
                     default:
+                        glyphs.popNode(e);
                 }
                 if (prevGlyphs != null)
                     glyphs = prevGlyphs;
@@ -598,6 +600,7 @@ class XmlText<T:FontChar2> extends Text<T, XmlTileGroup<T>> {
                     prevChar = CharAccess.EMPTY;
                 case "img":
                 default:
+                    glyphs.pushNode(e);
             }
             for (child in e)
                 addNode(child, font, align, scale, rebuild, metrics);
