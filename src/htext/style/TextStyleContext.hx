@@ -1,4 +1,6 @@
 package htext.style;
+import font.GLGlyphData.TileRecord;
+import font.GLGlyphData.Glyphs;
 import Axis2D;
 import font.FontInstance;
 import font.FontStorage;
@@ -28,8 +30,8 @@ class TextStyleContext {
         this.align = align;
     }
 
-    public function createLayouter() {
-        var l = layouterFactory.create(defaultFontName);
+    public function createLayouter<T:TileRecord>(glyphs:Glyphs<T> = null) {
+        var l = layouterFactory.create(defaultFontName, glyphs);
         l.setTextAlign(align[horizontal], align[vertical]) ;
         return l;
     }

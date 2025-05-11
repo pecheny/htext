@@ -18,5 +18,5 @@ interface TextLayouter<T:TileRecord> extends TextWidthConstraint {
 }
 
 interface CharsLayouterFactory {
-    function create<T:TileRecord>(fontName:String = "", fac:Void->Glyphs<T> = null):TextLayouter<T>;
+    function create<T:TileRecord>(fontName:String = "", glyphs:Glyphs<T> = null):TextLayouter<T>;
 }

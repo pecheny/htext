@@ -46,7 +46,8 @@ class H2dCharsLayouterFactory implements CharsLayouterFactory {
     public function new(f) {
         this.font = f;
     }
-    public function create<T:TileRecord>(fname = "", _:Void->Glyphs<T> = null):TextLayouter<T>{
+
+    public function create<T:TileRecord>(fontName:String = "", glyphs:Glyphs<T> = null):TextLayouter<T> {
         // todo do not ignore fname
         return cast new H2dTextLayouter(font);
     }
@@ -133,8 +134,9 @@ class H2dRichCharsLayouterFactory implements CharsLayouterFactory {
     // TODO As long as the layouter accepts XmlGlyphs, the @fac arg should be constrained as well
     // to be returning XmlGlyphs. But it requires introduce typeparameter with constraints to the interface.
     // For now, I leave a cast with hope the user passes the proper fac only.
-    public function create<T:TileRecord>(f = "", fac:Void->Glyphs<T>=null):TextLayouter<T> {
-        var glyphs = if (fac == null) new XmlGlyphs() else cast fac();
-        return new H2dRichTextLayouter(fonts, f, glyphs);
+    public function create<T:TileRecord>(f = "", glyphs:Glyphs<T> = null):TextLayouter<T> {
+        if (glyphs == null)
+            glyphs = new XmlGlyphs();
+        return new H2dRichTextLayouter(fonts, f, cast glyphs);
     }
 }
