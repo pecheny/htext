@@ -500,7 +500,8 @@ class XmlText<T:FontChar2> extends Text<T, XmlTileGroup<T>> {
 //			createInteractive();
         }
         if (e.nodeType == Xml.Element) {
-            var prevColor = null, prevGlyphs = null;
+            var prevColor = null;
+            // var  prevGlyphs = null;
             var oldAlign = align;
             var oldScale = scale;
             var nodeName = e.nodeName.toLowerCase();
@@ -526,15 +527,15 @@ class XmlText<T:FontChar2> extends Text<T, XmlTileGroup<T>> {
                     default:
                         glyphs.popNode(e);
                 }
-                if (prevGlyphs != null)
-                    glyphs = prevGlyphs;
+                // if (prevGlyphs != null)
+                //     glyphs = prevGlyphs;
 //			if( prevColor != null )
 //				@:privateAccess glyphs.curColor.load(prevColor);
             }
             inline function setFont(v:String) {
                 font = loadFont(v);
-                if (prevGlyphs == null) prevGlyphs = glyphs;
-                var prev = glyphs;
+                // if (prevGlyphs == null) prevGlyphs = glyphs;
+                // var prev = glyphs;
                 // init drawcall was here
 //				@:privateAccess glyphs.curColor.load(prev.curColor);
 //				elements.push(glyphs);
