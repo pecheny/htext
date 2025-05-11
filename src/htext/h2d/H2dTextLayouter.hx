@@ -1,16 +1,14 @@
 package htext.h2d;
 
 import font.FontStorage;
-import font.GLGlyphData.Glyphs;
-import font.GLGlyphData.TileRecord;
 import font.GLGlyphData;
-import font.IFont;
 import haxe.ds.ReadOnlyArray;
-import htext.h2d.Text;
-import htext.h2d.XmlText;
+import htext.Align;
 import htext.TextLayouter;
 import htext.h2d.Text.Align as H2dAlign;
-import htext.Align;
+import htext.h2d.Text.IFont;
+import htext.h2d.Text.Text;
+import htext.h2d.XmlText;
 
 class H2dTextLayouter implements TextLayouter {
     var text:Text<GLGlyphData, Glyphs<TileRecord>>;

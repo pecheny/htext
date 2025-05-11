@@ -1,6 +1,5 @@
 package htext.h2d;
 
-import font.FontStorage;
 import htext.h2d.Text;
 import font.bmf.h2d.Tile;
 import Xml;
