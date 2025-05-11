@@ -12,7 +12,7 @@ import htext.TextLayouter;
 import htext.h2d.Text.Align as H2dAlign;
 import htext.Align;
 
-class H2dTextLayouter implements TextLayouter<TileRecord> {
+class H2dTextLayouter implements TextLayouter {
     var text:Text<GLGlyphData, Glyphs<TileRecord>>;
     var glyphs:Glyphs<TileRecord>;
     public function new(f) {
@@ -40,6 +40,7 @@ class H2dTextLayouter implements TextLayouter<TileRecord> {
         // todo copy impl from H2dRich impl or extract it to common base class.
         return 0.;
     }
+
 }
 class H2dCharsLayouterFactory implements CharsLayouterFactory {
     var font:IFont;
@@ -47,13 +48,13 @@ class H2dCharsLayouterFactory implements CharsLayouterFactory {
         this.font = f;
     }
 
-    public function create<T:TileRecord>(fontName:String = "", glyphs:Glyphs<T> = null):TextLayouter<T> {
+    public function create<T:TileRecord>(fontName:String = "", glyphs:Glyphs<T> = null):TextLayouter {
         // todo do not ignore fname
         return cast new H2dTextLayouter(font);
     }
 }
 
-class H2dRichTextLayouter<T:TileRecord> implements TextLayouter<T> {
+class H2dRichTextLayouter<T:TileRecord> implements TextLayouter {
     var text:XmlText<GLGlyphData>;
     var glyphs:XmlGlyphs<T>;
     var fonts:FontStorage;
@@ -81,8 +82,8 @@ class H2dRichTextLayouter<T:TileRecord> implements TextLayouter<T> {
         @:privateAccess text.updateSize();
     }
 
-    public function getTiles():ReadOnlyArray<T> {
-        return glyphs.tiles;
+    public function getTiles():ReadOnlyArray<TileRecord> {
+        return cast glyphs.tiles;
     }
 
     public function setWidthConstraint(val:Float):Void {
@@ -134,7 +135,7 @@ class H2dRichCharsLayouterFactory implements CharsLayouterFactory {
     // TODO As long as the layouter accepts XmlGlyphs, the @fac arg should be constrained as well
     // to be returning XmlGlyphs. But it requires introduce typeparameter with constraints to the interface.
     // For now, I leave a cast with hope the user passes the proper fac only.
-    public function create<T:TileRecord>(f = "", glyphs:Glyphs<T> = null):TextLayouter<T> {
+    public function create<T:TileRecord>(f = "", glyphs:Glyphs<T> = null):TextLayouter {
         if (glyphs == null)
             glyphs = new XmlGlyphs();
         return new H2dRichTextLayouter(fonts, f, cast glyphs);
