@@ -13,20 +13,26 @@ import htext.h2d.XmlText;
 class H2dTextLayouter implements TextLayouter {
     var text:Text<GLGlyphData, Glyphs<TileRecord>>;
     var glyphs:Glyphs<TileRecord>;
+    var processors:TextProcessor;
+
     public function new(f) {
         glyphs = new Glyphs();
         text = new Text(f, glyphs);
     }
+
     public function setText(val:String):Void {
-        text.text = val;
+        text.text = processors.process(val);
         @:privateAccess text.updateSize();
     }
+
     public function getTiles():ReadOnlyArray<TileRecord> {
         return glyphs.tiles;
     }
+
     public function setWidthConstraint(val:Float):Void {
         text.constraintSize(val, -1);
     }
+
     public function setTextAlign(align:Align, ?valign) {
         text.textAlign = switch align {
             case Forward: H2dAlign.Left;
@@ -34,14 +40,20 @@ class H2dTextLayouter implements TextLayouter {
             case Center: H2dAlign.Center;
         };
     }
+
     public function calculateVertOffset() {
         // todo copy impl from H2dRich impl or extract it to common base class.
         return 0.;
     }
 
+    public function setProcessor(pr:htext.TextLayouter.TextProcessor) {
+        this.processors = pr;
+    }
 }
+
 class H2dCharsLayouterFactory implements CharsLayouterFactory {
     var font:IFont;
+
     public function new(f) {
         this.font = f;
     }
@@ -58,9 +70,11 @@ class H2dRichTextLayouter<T:TileRecord> implements TextLayouter {
     var fonts:FontStorage;
     var lineHeight:Float;
     var valign:Align = Center;
+    var processor:TextProcessor;
 
-    public function new(f, defaultFont = "", glyphs) {
+    public function new(f, defaultFont = "", glyphs, processor = null) {
         fonts = f;
+        this.processor = processor;
         this.glyphs = glyphs;
         var ifont = fonts.getFont(defaultFont);
         lineHeight = ifont.font.getLineHeight();
@@ -76,7 +90,7 @@ class H2dRichTextLayouter<T:TileRecord> implements TextLayouter {
     }
 
     public function setText(val:String):Void {
-        text.text = val;
+        text.text = processor.process(val);
         @:privateAccess text.updateSize();
     }
 
@@ -108,7 +122,7 @@ class H2dRichTextLayouter<T:TileRecord> implements TextLayouter {
             case Forward: 0;
             // pivot of the text lays on baseline of the first line.
             // Desired behavior for odd num of lines is the middle of letters of central line lyes on the center of placeholder
-            // for even lines = center of the placeholder is somewhere between lrtters of two crntral lines
+            // for even lines = center of the placeholder is somewhere between letters of two central lines
             // not sure in this formula but it provides acceptable visual result on hardcoded ascent value (for Roboto Slab font)
             // In proper way the ascent shoulld be in the IFont api but since BMF format doesnt store this data for now i'd keep it that way.
             // I'l be back for this when other font i use will require other ascent val.
@@ -117,9 +131,13 @@ class H2dRichTextLayouter<T:TileRecord> implements TextLayouter {
             case Center:
                 var oddLinesMp = (ln % 2);
                 var evenLinesMp = (1 - ln % 2);
-                (( 0.25 * evenLinesMp) + (ascent() * oddLinesMp) + Math.floor(ln / 2) - 1) * lineHeight;
+                ((0.25 * evenLinesMp) + (ascent() * oddLinesMp) + Math.floor(ln / 2) - 1) * lineHeight;
             case Backward: lineHeight * (ln - 1);
         }
+    }
+
+    public function setProcessor(pr:TextProcessor) {
+        this.processor = pr;
     }
 }
 

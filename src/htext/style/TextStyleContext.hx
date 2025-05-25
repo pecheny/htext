@@ -1,4 +1,5 @@
 package htext.style;
+import htext.TextLayouter.TextProcessor;
 import font.GLGlyphData.TileRecord;
 import font.GLGlyphData.Glyphs;
 import Axis2D;
@@ -19,8 +20,9 @@ class TextStyleContext {
     var pivot:AVector2D<TextPivot>;
     var padding:AVector2D<Padding>;
     var align:AVector2D<Align>;
+    var processor:TextProcessor;
 
-    public function new(lf, fonts:FontStorage, defaultFont:String, scale, pivot, padding, align) {
+    public function new(lf, fonts:FontStorage, defaultFont:String, scale, pivot, padding, align, processor:TextProcessor = null) {
         this.layouterFactory = lf;
         this.defaultFontName = defaultFont;
         this.font = fonts.getFont(defaultFont);
@@ -28,11 +30,13 @@ class TextStyleContext {
         this.pivot = pivot;
         this.padding = padding;
         this.align = align;
+        this.processor = processor;
     }
 
     public function createLayouter<T:TileRecord>(glyphs:Glyphs<T> = null) {
         var l = layouterFactory.create(defaultFontName, glyphs);
         l.setTextAlign(align[horizontal], align[vertical]) ;
+        l.setProcessor(processor);
         return l;
     }
 

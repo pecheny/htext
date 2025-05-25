@@ -1,4 +1,5 @@
 package htext.style;
+import htext.TextLayouter.TextProcessor;
 import a2d.Stage;
 import Axis2D;
 import font.bmf.BMFont.BMFontFactory;
@@ -38,7 +39,7 @@ class TextContextBuilder implements TextContextStorage {
     var align:AVector2D<Align>;
     var fontName = "";
     var identityMeasureUnits:AVector<ScreenMeasureUnit, FontScale>;
-
+    var textProcessor:TextProcessor;
 
     public function new(fonts:FontStorage, ar) {
         this.fonts = fonts;
@@ -53,6 +54,10 @@ class TextContextBuilder implements TextContextStorage {
         pivot = AVConstructor.create(null, null);
         padding = AVConstructor.create(new SamePadding(0, identityMeasureUnits[sfr]), new SamePadding(0, identityMeasureUnits[sfr]));
         align = AVConstructor.create(Forward, Forward);
+    }
+    
+    public function setTextPreprocessor(p:TextProcessor) {
+        textProcessor = p;
     }
 
     public function withPadding(a:Axis2D, units:ScreenMeasureUnit, v:Float) {
@@ -126,7 +131,7 @@ class TextContextBuilder implements TextContextStorage {
     }
 
     public function build() {
-        var tc = new TextStyleContext(layouterFactory, fonts, fontName, fontScale, pivot.copy(), padding.copy(), align.copy());
+        var tc = new TextStyleContext(layouterFactory, fonts, fontName, fontScale, pivot.copy(), padding.copy(), align.copy(), textProcessor);
         if (name != "") {
             styles[name] = tc;
             name = "";
