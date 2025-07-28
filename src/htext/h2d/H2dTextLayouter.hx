@@ -49,6 +49,10 @@ class H2dTextLayouter implements TextLayouter {
     public function setProcessor(pr:htext.TextLayouter.TextProcessor) {
         this.processors = pr;
     }
+
+    public function getContentSize(a:Axis2D):Float {
+        return if (a == vertical) text.textHeight else text.textWidth;
+    }
 }
 
 class H2dCharsLayouterFactory implements CharsLayouterFactory {
@@ -138,6 +142,10 @@ class H2dRichTextLayouter<T:TileRecord> implements TextLayouter {
 
     public function setProcessor(pr:TextProcessor) {
         this.processor = pr;
+    }
+
+    public function getContentSize(a:Axis2D):Float {
+        return if (a == vertical) text.textHeight else text.textWidth;
     }
 }
 
