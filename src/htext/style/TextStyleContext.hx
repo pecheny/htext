@@ -21,8 +21,9 @@ class TextStyleContext {
     var padding:AVector2D<Padding>;
     var align:AVector2D<Align>;
     var processor:TextProcessor;
+    public var autoSize:Bool = false;
 
-    public function new(lf, fonts:FontStorage, defaultFont:String, scale, pivot, padding, align, processor:TextProcessor = null) {
+    public function new(lf, fonts:FontStorage, defaultFont:String, scale, pivot, padding, align, autoSize, processor:TextProcessor = null) {
         this.layouterFactory = lf;
         this.defaultFontName = defaultFont;
         this.font = fonts.getFont(defaultFont);
@@ -30,6 +31,7 @@ class TextStyleContext {
         this.pivot = pivot;
         this.padding = padding;
         this.align = align;
+        this.autoSize = autoSize;
         this.processor = processor;
     }
 

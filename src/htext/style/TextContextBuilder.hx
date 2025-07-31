@@ -40,6 +40,7 @@ class TextContextBuilder implements TextContextStorage {
     var fontName = "";
     var identityMeasureUnits:AVector<ScreenMeasureUnit, FontScale>;
     var textProcessor:TextProcessor;
+    var autoSize:Bool = false;
 
     public function new(fonts:FontStorage, ar) {
         this.fonts = fonts;
@@ -54,6 +55,7 @@ class TextContextBuilder implements TextContextStorage {
         pivot = AVConstructor.create(null, null);
         padding = AVConstructor.create(new SamePadding(0, identityMeasureUnits[sfr]), new SamePadding(0, identityMeasureUnits[sfr]));
         align = AVConstructor.create(Forward, Forward);
+        autoSize = false;
     }
     
     public function setTextPreprocessor(p:TextProcessor) {
@@ -98,6 +100,12 @@ class TextContextBuilder implements TextContextStorage {
             case px:new PixelFontHeightCalculator(ar.getAspectRatio(), cast ar.getWindowSize(), val);
         }
     }
+    
+    public function withAutoSize(value) {
+        this.autoSize = value;
+        return this;
+    }
+
 
 //    public function withSizeInPixels(px:Int) {
 //        fontScale = new PixelFontHeightCalculator(ar.getAspectRatio(), cast ar.getWindowSize(), px);
@@ -131,7 +139,7 @@ class TextContextBuilder implements TextContextStorage {
     }
 
     public function build() {
-        var tc = new TextStyleContext(layouterFactory, fonts, fontName, fontScale, pivot.copy(), padding.copy(), align.copy(), textProcessor);
+        var tc = new TextStyleContext(layouterFactory, fonts, fontName, fontScale, pivot.copy(), padding.copy(), align.copy(), autoSize, textProcessor);
         if (name != "") {
             styles[name] = tc;
             name = "";
