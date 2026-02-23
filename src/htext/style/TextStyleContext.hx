@@ -27,6 +27,8 @@ class TextStyleContext {
         this.layouterFactory = lf;
         this.defaultFontName = defaultFont;
         this.font = fonts.getFont(defaultFont);
+        if (font == null)
+            throw "Font cant be null";
         this.fontScale = scale;
         this.pivot = pivot;
         this.padding = padding;
