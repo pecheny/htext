@@ -64,7 +64,7 @@ class TextStyleContext {
             case Backward : padding[a].getSecondary(transform);
             case Center : 0;
         }
-        return offset + pivot.getPivot(a, transform, this);
+        return offset / transform.size[a] + pivot.getPivot(a, transform, this);
     }
 
     public function getContentSize(a:Axis2D, transform:Location2D) {
