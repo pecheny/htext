@@ -26,11 +26,10 @@ class TextDemo extends Sprite {
         fonts.initFont("bold", "Assets/RobotoSlab-bold.fnt");
         var lfac = new H2dRichCharsLayouterFactory(fonts);
         var pivot:AVector2D<TextPivot> = AVConstructor.create(new ForwardPivot(), new ForwardPivot());
-        var padding:AVector2D<Padding> = AVConstructor.create(new SamePadding(0, new FitFontScale(horizontal)),
-            new SamePadding(0, new FitFontScale(vertical)));
+        var padding:AVector2D<Padding> = AVConstructor.create(new SamePadding(0, new FitFontScale(horizontal)), new SamePadding(0, new FitFontScale(vertical)));
         var align:AVector2D<Align> = AVConstructor.create(Forward, Forward);
 
-        var textStyleContext = new TextStyleContext(lfac, fonts, "", new FitFontScale(120), pivot, padding, align);
+        var textStyleContext = new TextStyleContext(lfac, fonts, "", new FitFontScale(120), pivot, padding, align, false);
         var bd = openfl.utils.Assets.getBitmapData(@:privateAccess textStyleContext.font.texturePath);
         var l = textStyleContext.createLayouter();
         var rend = new OpenflTextRender(l, new Transformer(), bd);
@@ -40,7 +39,7 @@ class TextDemo extends Sprite {
 }
 
 class OpenflTextRender extends Sprite {
-    var layouter:TextLayouter<TileRecord>;
+    var layouter:TextLayouter;
     var vertices = new Vector<Float>();
     var indices = new Vector<Int>();
     var uvtData = new Vector<Float>();
