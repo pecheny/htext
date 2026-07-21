@@ -1,3 +1,5 @@
 {
-    "lime.projectFile":"project.xml"
+    "lime.projectFile":"project.xml",
+    "window.title": "HTEXT . . . . . . ${dirty}${activeEditorShort} ",
+
 }
